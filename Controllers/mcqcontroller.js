@@ -12,7 +12,7 @@ const getMcqs = async (req, res) => {
     option3: 1,
     option4: 1,
   };
-  const mcqs = await MCQ.find({},projection).sort({ createdAt: 1 });
+  const mcqs = await MCQ.find({}, projection).sort({ createdAt: 1 });
   res.status(200).json(mcqs);
 };
 
@@ -44,7 +44,36 @@ const createMcq = async (req, res) => {
   }
 };
 
+//correct mcq and display the score mcq
+const correctMCQ = async (req, res) => {
+  const associativeArray = req.body;
+  //add mcq to db
+  try {
+    var cnt = 0;
+    const projection = {
+      questionid: 1,
+      correct_option: 1,
+    };
+    const mcqs = await MCQ.find({}, projection).sort({ createdAt: 1 });
+    const mcqAssociativeArray = {};
+    mcqs.forEach((mcq) => {
+      mcqAssociativeArray[mcq.questionid] = mcq.correct_option;
+    });
+    for (const questionId in associativeArray) {
+      if (associativeArray.hasOwnProperty(questionId)) {
+        if (mcqAssociativeArray[questionId] === associativeArray[questionId]) {
+          cnt++;
+        }
+      }
+    }
+    res.status(200).json({ Score: cnt });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
 module.exports = {
   getMcqs,
   createMcq,
+  correctMCQ,
 };
