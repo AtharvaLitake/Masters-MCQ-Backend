@@ -47,6 +47,12 @@ const createMcq = async (req, res) => {
 //correct mcq and display the score mcq
 const correctMCQ = async (req, res) => {
   const associativeArray = req.body;
+  const questionIdToSelectedOption = {};
+  associativeArray.selectedAnswers.forEach((answer) => {
+    questionIdToSelectedOption[answer.questionid] = answer.correct_option;
+  });
+
+  console.log(questionIdToSelectedOption);
   //add mcq to db
   try {
     var cnt = 0;
@@ -59,9 +65,9 @@ const correctMCQ = async (req, res) => {
     mcqs.forEach((mcq) => {
       mcqAssociativeArray[mcq.questionid] = mcq.correct_option;
     });
-    for (const questionId in associativeArray) {
-      if (associativeArray.hasOwnProperty(questionId)) {
-        if (mcqAssociativeArray[questionId] === associativeArray[questionId]) {
+    for (const questionId in questionIdToSelectedOption) {
+      if (questionIdToSelectedOption.hasOwnProperty(questionId)) {
+        if (mcqAssociativeArray[questionId] === questionIdToSelectedOption[questionId]) {
           cnt++;
         }
       }
