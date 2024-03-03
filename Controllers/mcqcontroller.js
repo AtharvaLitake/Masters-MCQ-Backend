@@ -1,6 +1,7 @@
 //for better organization we use model - controller architecture
 const MCQ = require("../models/mcqschema.js");
 const mongoose = require("mongoose");
+let Score_user;
 
 //get all mcqs
 const getMcqs = async (req, res) => {
@@ -72,14 +73,29 @@ const correctMCQ = async (req, res) => {
         }
       }
     }
+    console.log(Score_user)
     res.status(200).json({ Score: cnt });
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
 };
 
+//getting score
+const getScore = async (req, res) => {
+  try {
+    console.log(Score_user)
+    res.status(200).json({ Score: Score_user });
+  } catch (error) {
+    console.error('Error fetching score:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+};
+
+
+
 module.exports = {
   getMcqs,
   createMcq,
   correctMCQ,
+  getScore
 };

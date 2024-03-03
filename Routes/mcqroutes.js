@@ -1,5 +1,5 @@
 const express=require('express')
-const {createMcq,getMcqs,correctMCQ}=require('../Controllers/mcqcontroller.js')
+const {createMcq,getMcqs,correctMCQ,getScore}=require('../Controllers/mcqcontroller.js')
 //require express router
 //becoz we dont have access to app
 const router = express.Router()
@@ -10,5 +10,7 @@ router.get('/',getMcqs)
 router.post('/', createMcq)
 
 router.post('/score',correctMCQ )
+
+router.get('/getscore',getScore )
 
 module.exports=router
